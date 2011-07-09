@@ -1,5 +1,2 @@
-module Phidgets
-  module Ffi
-    # Your code goes here...
-  end
-end
+require 'ffi'
+require 'phidgets-ffi/phidgets-ffi'
