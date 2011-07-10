@@ -1,5 +1,7 @@
+require 'ffi'
 require 'phidgets-ffi/ffi/common'
+require 'phidgets-ffi/ffi/constants'
 require 'phidgets-ffi/ffi/manager'
 require 'phidgets-ffi/ffi/servo'
-require 'phidegts-ffi/ffi/interface_kit'
+require 'phidgets-ffi/ffi/interface_kit'
 
