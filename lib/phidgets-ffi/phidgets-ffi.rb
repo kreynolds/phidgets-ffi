@@ -3,6 +3,7 @@ module PhidgetsFFI
   ffi_lib '/Library/Frameworks/Phidget21.framework/Versions/Current/Phidget21'
 
   typedef :pointer, :phid
+  typedef :pointer, :user_ptr
 
   ServoType = enum(
     :default, 1,
@@ -107,16 +108,16 @@ module PhidgetsFFI
   attach_function :CPhidget_openLabel, [:phid, :string], :int #int CPhidget_openLabel(CPhidgetHandle phid, const char *label);
   attach_function :CPhidget_close, [:phid], :int #int CPhidget_close(CPhidgetHandle phid);
   attach_function :CPhidget_delete, [:phid], :int #int CPhidget_delete(CPhidgetHandle phid);
-  callback :CPhidget_set_OnDetach_Callback, [:phid, :pointer], :int
-  attach_function :CPhidget_set_OnDetach_Handler, [:phid, :CPhidget_set_OnDetach_Callback, :pointer], :int #int CPhidget_set_OnDetach_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
-  callback :CPhidget_set_OnAttach_Callback, [:phid, :pointer], :int
-  attach_function :CPhidget_set_OnAttach_Handler, [:phid, :CPhidget_set_OnAttach_Callback, :pointer], :int #int CPhidget_set_OnAttach_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
-  callback :CPhidget_set_OnServerConnect_Callback, [:phid, :pointer], :int
-  attach_function :CPhidget_set_OnServerConnect_Handler, [:phid, :CPhidget_set_OnServerConnect_Callback, :pointer], :int #int CPhidget_set_OnServerConnect_Handler(CPhidgetHandle phid, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
-  callback :CPhidget_set_OnServerDisconnect_Callback, [:phid, :pointer], :int
-  attach_function :CPhidget_set_OnServerDisconnect_Handler, [:phid, :CPhidget_set_OnServerDisconnect_Callback, :pointer], :int #int CPhidget_set_OnServerDisconnect_Handler(CPhidgetHandle phid, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
-  callback :CPhidget_set_OnError_Callback, [:phid, :pointer, :int, :string], :int
-  attach_function :CPhidget_set_OnError_Handler, [:phid, :CPhidget_set_OnError_Callback, :pointer], :int #int CPhidget_set_OnError_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr, int errorCode, const char *errorString), void *userPtr);
+  callback :CPhidget_set_OnDetach_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidget_set_OnDetach_Handler, [:phid, :CPhidget_set_OnDetach_Callback, :user_ptr], :int #int CPhidget_set_OnDetach_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnAttach_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidget_set_OnAttach_Handler, [:phid, :CPhidget_set_OnAttach_Callback, :user_ptr], :int #int CPhidget_set_OnAttach_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnServerConnect_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidget_set_OnServerConnect_Handler, [:phid, :CPhidget_set_OnServerConnect_Callback, :user_ptr], :int #int CPhidget_set_OnServerConnect_Handler(CPhidgetHandle phid, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnServerDisconnect_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidget_set_OnServerDisconnect_Handler, [:phid, :CPhidget_set_OnServerDisconnect_Callback, :user_ptr], :int #int CPhidget_set_OnServerDisconnect_Handler(CPhidgetHandle phid, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnError_Callback, [:phid, :user_ptr, :int, :string], :int
+  attach_function :CPhidget_set_OnError_Handler, [:phid, :CPhidget_set_OnError_Callback, :user_ptr], :int #int CPhidget_set_OnError_Handler(CPhidgetHandle phid, int( *fptr)(CPhidgetHandle phid, void *userPtr, int errorCode, const char *errorString), void *userPtr);
   attach_function :CPhidget_getDeviceName, [:phid, :pointer], :int #int CPhidget_getDeviceName(CPhidgetHandle phid, const char **deviceName);
   attach_function :CPhidget_getSerialNumber, [:phid, :pointer], :int #int CPhidget_getSerialNumber(CPhidgetHandle phid, int *serialNumber);
   attach_function :CPhidget_getDeviceVersion, [:phid, :pointer], :int #int CPhidget_getDeviceVersion(CPhidgetHandle phid, int *deviceVersion);
@@ -132,26 +133,26 @@ module PhidgetsFFI
   attach_function :CPhidget_getServerStatus, [:phid, :pointer], :int #int CPhidget_getServerStatus(CPhidgetHandle phid, int *serverStatus);
   attach_function :CPhidget_getDeviceID, [:phid, :pointer], :int #int CPhidget_getDeviceID(CPhidgetHandle phid, CPhidget_DeviceID *deviceID);
   attach_function :CPhidget_getDeviceClass, [:phid, :pointer], :int #int CPhidget_getDeviceClass(CPhidgetHandle phid, CPhidget_DeviceClass *deviceClass);
-  callback :CPhidget_set_OnWillSleep_Callback, [:pointer], :int
-  attach_function :CPhidget_set_OnWillSleep_Handler, [:CPhidget_set_OnWillSleep_Callback, :pointer], :int #int CPhidget_set_OnWillSleep_Handler(int( *fptr)(void *userPtr), void *userPtr);
-  callback :CPhidget_set_OnWakeup_Callback, [:pointer], :int
-  attach_function :CPhidget_set_OnWakeup_Handler, [:CPhidget_set_OnWakeup_Callback, :pointer], :int #int CPhidget_set_OnWakeup_Handler(int( *fptr)(void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnWillSleep_Callback, [:user_ptr], :int
+  attach_function :CPhidget_set_OnWillSleep_Handler, [:CPhidget_set_OnWillSleep_Callback, :user_ptr], :int #int CPhidget_set_OnWillSleep_Handler(int( *fptr)(void *userPtr), void *userPtr);
+  callback :CPhidget_set_OnWakeup_Callback, [:user_ptr], :int
+  attach_function :CPhidget_set_OnWakeup_Handler, [:CPhidget_set_OnWakeup_Callback, :user_ptr], :int #int CPhidget_set_OnWakeup_Handler(int( *fptr)(void *userPtr), void *userPtr);
 
   attach_function :CPhidgetInterfaceKit_create, [:phid], :int #int CPhidgetInterfaceKit_create(CPhidgetInterfaceKitHandle *phid);
   attach_function :CPhidgetInterfaceKit_getInputCount, [:phid, :pointer], :int #int CPhidgetInterfaceKit_getInputCount(CPhidgetInterfaceKitHandle phid, int *count);
   attach_function :CPhidgetInterfaceKit_getInputState, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getInputState(CPhidgetInterfaceKitHandle phid, int index, int *inputState);
-  callback :CPhidgetInterfaceKit_set_OnInputChange_Callback, [:phid, :pointer, :int, :int], :int
-  attach_function :CPhidgetInterfaceKit_set_OnInputChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnInputChange_Callback, :pointer], :int #int CPhidgetInterfaceKit_set_OnInputChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int inputState), void *userPtr);
+  callback :CPhidgetInterfaceKit_set_OnInputChange_Callback, [:phid, :user_ptr, :int, :int], :int
+  attach_function :CPhidgetInterfaceKit_set_OnInputChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnInputChange_Callback, :user_ptr], :int #int CPhidgetInterfaceKit_set_OnInputChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int inputState), void *userPtr);
   attach_function :CPhidgetInterfaceKit_getOutputCount, [:phid, :pointer], :int #int CPhidgetInterfaceKit_getOutputCount(CPhidgetInterfaceKitHandle phid, int *count);
   attach_function :CPhidgetInterfaceKit_getOutputState, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getOutputState(CPhidgetInterfaceKitHandle phid, int index, int *outputState);
   attach_function :CPhidgetInterfaceKit_setOutputState, [:phid, :int, :int], :int #int CPhidgetInterfaceKit_setOutputState(CPhidgetInterfaceKitHandle phid, int index, int outputState);
-  callback :CPhidgetInterfaceKit_set_OnOutputChange_Callback, [:phid, :pointer, :int, :int], :int
-  attach_function :CPhidgetInterfaceKit_set_OnOutputChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnOutputChange_Callback, :pointer], :int #int CPhidgetInterfaceKit_set_OnOutputChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int outputState), void *userPtr);
+  callback :CPhidgetInterfaceKit_set_OnOutputChange_Callback, [:phid, :user_ptr, :int, :int], :int
+  attach_function :CPhidgetInterfaceKit_set_OnOutputChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnOutputChange_Callback, :user_ptr], :int #int CPhidgetInterfaceKit_set_OnOutputChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int outputState), void *userPtr);
   attach_function :CPhidgetInterfaceKit_getSensorCount, [:phid, :pointer], :int #int CPhidgetInterfaceKit_getSensorCount(CPhidgetInterfaceKitHandle phid, int *count);
   attach_function :CPhidgetInterfaceKit_getSensorValue, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getSensorValue(CPhidgetInterfaceKitHandle phid, int index, int *sensorValue);
   attach_function :CPhidgetInterfaceKit_getSensorRawValue, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getSensorRawValue(CPhidgetInterfaceKitHandle phid, int index, int *sensorRawValue);
-  callback :CPhidgetInterfaceKit_set_OnSensorChange_Callback, [:phid, :pointer, :int, :int], :int
-  attach_function :CPhidgetInterfaceKit_set_OnSensorChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnSensorChange_Callback, :pointer], :int #int CPhidgetInterfaceKit_set_OnSensorChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int sensorValue), void *userPtr);
+  callback :CPhidgetInterfaceKit_set_OnSensorChange_Callback, [:phid, :user_ptr, :int, :int], :int
+  attach_function :CPhidgetInterfaceKit_set_OnSensorChange_Handler, [:phid, :CPhidgetInterfaceKit_set_OnSensorChange_Callback, :user_ptr], :int #int CPhidgetInterfaceKit_set_OnSensorChange_Handler(CPhidgetInterfaceKitHandle phid, int ( *fptr)(CPhidgetInterfaceKitHandle phid, void *userPtr, int index, int sensorValue), void *userPtr);
   attach_function :CPhidgetInterfaceKit_getSensorChangeTrigger, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getSensorChangeTrigger(CPhidgetInterfaceKitHandle phid, int index, int *trigger);
   attach_function :CPhidgetInterfaceKit_setSensorChangeTrigger, [:phid, :int, :int], :int #int CPhidgetInterfaceKit_setSensorChangeTrigger(CPhidgetInterfaceKitHandle phid, int index, int trigger);
   attach_function :CPhidgetInterfaceKit_getRatiometric, [:phid, :pointer], :int #int CPhidgetInterfaceKit_getRatiometric(CPhidgetInterfaceKitHandle phid, int *ratiometric);
@@ -166,12 +167,31 @@ module PhidgetsFFI
   attach_function :CPhidgetServo_setPosition, [:phid, :int, :double], :int #int CPhidgetServo_setPosition(CPhidgetServoHandle phid, int index, double position);
   attach_function :CPhidgetServo_getPositionMax, [:phid, :int, :pointer], :int #int CPhidgetServo_getPositionMax(CPhidgetServoHandle phid, int index, double *max);
   attach_function :CPhidgetServo_getPositionMin, [:phid, :int, :pointer], :int #int CPhidgetServo_getPositionMin(CPhidgetServoHandle phid, int index, double *min);
-  callback :CPhidgetServo_set_OnPositionChange_Callback, [:phid, :pointer, :int, :double], :int
-  attach_function :CPhidgetServo_set_OnPositionChange_Handler, [:phid, :CPhidgetServo_set_OnPositionChange_Callback, :pointer], :int #int CPhidgetServo_set_OnPositionChange_Handler(CPhidgetServoHandle phid, int ( *fptr)(CPhidgetServoHandle phid, void *userPtr, int index, double position), void *userPtr);
+  callback :CPhidgetServo_set_OnPositionChange_Callback, [:phid, :user_ptr, :int, :double], :int
+  attach_function :CPhidgetServo_set_OnPositionChange_Handler, [:phid, :CPhidgetServo_set_OnPositionChange_Callback, :user_ptr], :int #int CPhidgetServo_set_OnPositionChange_Handler(CPhidgetServoHandle phid, int ( *fptr)(CPhidgetServoHandle phid, void *userPtr, int index, double position), void *userPtr);
   attach_function :CPhidgetServo_getEngaged, [:phid, :int, :pointer], :int #int CPhidgetServo_getEngaged(CPhidgetServoHandle phid, int index, int *engagedState);
   attach_function :CPhidgetServo_setEngaged, [:phid, :int, :int], :int #int CPhidgetServo_setEngaged(CPhidgetServoHandle phid, int index, int engagedState);
   attach_function :CPhidgetServo_getServoType, [:phid, :int, :pointer], :int #int CPhidgetServo_getServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType *servoType);
   attach_function :CPhidgetServo_setServoType, [:phid, :int, ServoType], :int #int CPhidgetServo_setServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType servoType);
   attach_function :CPhidgetServo_setServoParameters, [:phid, :int, :double, :double, :double], :int #int CPhidgetServo_setServoParameters(CPhidgetServoHandle phid, int index, double min_us,double max_us,double degrees);
   
+  typedef :pointer, :phidm
+  attach_function :CPhidgetManager_create, [:phidm], :int #int CPhidgetManager_create(CPhidgetManagerHandle *phidm);
+  attach_function :CPhidgetManager_open, [:phidm], :int #int CPhidgetManager_open(CPhidgetManagerHandle phidm);
+  attach_function :CPhidgetManager_close, [:phidm], :int #int CPhidgetManager_close(CPhidgetManagerHandle phidm);
+  attach_function :CPhidgetManager_delete, [:phidm], :int #int CPhidgetManager_delete(CPhidgetManagerHandle phidm);
+  callback :CPhidgetManager_set_OnAttach_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidgetManager_set_OnAttach_Handler, [:phidm, :CPhidgetManager_set_OnAttach_Callback, :user_ptr], :int #int CPhidgetManager_set_OnAttach_Handler(CPhidgetManagerHandle phidm, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  callback :CPhidgetManager_set_OnDetach_Callback, [:phid, :user_ptr], :int
+  attach_function :CPhidgetManager_set_OnDetach_Handler, [:phidm, :CPhidgetManager_set_OnDetach_Callback, :user_ptr], :int #int CPhidgetManager_set_OnDetach_Handler(CPhidgetManagerHandle phidm, int ( *fptr)(CPhidgetHandle phid, void *userPtr), void *userPtr);
+  attach_function :CPhidgetManager_getAttachedDevices, [:phidm, :pointer, :pointer], :int #int CPhidgetManager_getAttachedDevices(CPhidgetManagerHandle phidm, CPhidgetHandle *phidArray[], int *count);
+  attach_function :CPhidgetManager_freeAttachedDevicesArray, [:pointer], :int #int CPhidgetManager_freeAttachedDevicesArray(CPhidgetHandle phidArray[]);
+  callback :CPhidgetManager_set_OnError_Callback, [:phidm, :user_ptr, :int, :string], :int
+  attach_function :CPhidgetManager_set_OnError_Handler, [:phidm, :CPhidgetManager_set_OnError_Callback, :user_ptr], :int #int CPhidgetManager_set_OnError_Handler(CPhidgetManagerHandle phidm, int( *fptr)(CPhidgetManagerHandle phidm, void *userPtr, int errorCode, const char *errorString), void *userPtr);
+  callback :CPhidgetManager_set_OnServerConnect_Callback, [:phidm, :user_ptr], :int
+  attach_function :CPhidgetManager_set_OnServerConnect_Handler, [:phidm, :CPhidgetManager_set_OnServerConnect_Callback, :user_ptr], :int #int CPhidgetManager_set_OnServerConnect_Handler(CPhidgetManagerHandle phidm, int ( *fptr)(CPhidgetManagerHandle phidm, void *userPtr), void *userPtr);
+  callback :CPhidgetManager_set_OnServerDisconnect_Callback, [:phidm, :user_ptr], :int
+  attach_function :CPhidgetManager_set_OnServerDisconnect_Handler, [:phidm, :CPhidgetManager_set_OnServerDisconnect_Callback, :user_ptr], :int #int CPhidgetManager_set_OnServerDisconnect_Handler(CPhidgetManagerHandle phidm, int ( *fptr)(CPhidgetManagerHandle phidm, void *userPtr), void *userPtr);
+  attach_function :CPhidgetManager_getServerID, [:phidm, :pointer], :int #int CPhidgetManager_getServerID(CPhidgetManagerHandle phidm, const char **serverID);
+  attach_function :CPhidgetManager_getServerAddress, [:phidm, :pointer, :pointer], :int#int CPhidgetManager_getServerAddress(CPhidgetManagerHandle phidm, const char **address, int *port);
 end
