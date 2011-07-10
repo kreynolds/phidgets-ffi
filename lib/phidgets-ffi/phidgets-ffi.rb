@@ -4,9 +4,30 @@ module PhidgetsFFI
 
   typedef :pointer, :phid
 
+  ServoType = enum(
+    :default, 1,
+    :raw_us_mode,
+    :hitec_hs322hd,
+    :hitec_hS5245mg,
+    :hitec_805bb,
+    :hitec_hs422,
+    :towerpro_mg90,
+    :hitec_hsr1425cr,
+    :hitec_hs785hb,
+    :hitec_hs485hb,
+    :hitec_hs645mg,
+    :hitec_815bb,
+    :firgelli_l12_30_50_06_r,
+    :firgelli_l12_50_100_06_r,
+    :firgelli_l12_50_210_06_r,
+    :firgelli_l12_100_50_06_r,
+    :firgelli_l12_100_100_06_r,
+    :user_defind
+  )
+
   DeviceStatus = enum(
     :detached, 0,
-    :attached, 1
+    :attached
   )
   DeviceClass = enum(
     :accelerometer, 2,
@@ -105,7 +126,7 @@ module PhidgetsFFI
   attach_function :CPhidget_getDeviceLabel, [:phid, :pointer], :int #int CPhidget_getDeviceLabel(CPhidgetHandle phid, const char **deviceLabel);
   attach_function :CPhidget_setDeviceLabel, [:phid, :string], :int #int CPhidget_setDeviceLabel(CPhidgetHandle phid, const char *deviceLabel);
   attach_function :CPhidget_getErrorDescription, [:int, :pointer], :int #int CPhidget_getErrorDescription(int errorCode, const char **errorString);
-  attach_function :CPhidget_waitForAttachment, [:phid, :int], :int
+  attach_function :CPhidget_waitForAttachment, [:phid, :int], :int #int CPhidget_waitForAttachment(CPhidgetHandle phid, int milliseconds);
   attach_function :CPhidget_getServerID, [:phid, :pointer], :int #int CPhidget_getServerID(CPhidgetHandle phid, const char **serverID);
   attach_function :CPhidget_getServerAddress, [:phid, :pointer, :pointer], :int #int CPhidget_getServerAddress(CPhidgetHandle phid, const char **address, int *port);
   attach_function :CPhidget_getServerStatus, [:phid, :pointer], :int #int CPhidget_getServerStatus(CPhidgetHandle phid, int *serverStatus);
@@ -138,5 +159,19 @@ module PhidgetsFFI
   attach_function :CPhidgetInterfaceKit_getDataRate, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRate(CPhidgetInterfaceKitHandle phid, int index, int *milliseconds);
   attach_function :CPhidgetInterfaceKit_setDataRate, [:phid, :int, :int], :int #int CPhidgetInterfaceKit_setDataRate(CPhidgetInterfaceKitHandle phid, int index, int milliseconds);
   attach_function :CPhidgetInterfaceKit_getDataRateMax, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRateMax(CPhidgetInterfaceKitHandle phid, int index, int *max);
-  attach_function :CPhidgetInterfaceKit_getDataRateMin, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRateMin(CPhidgetInterfaceKitHandle phid, int index, int *min); 
+  attach_function :CPhidgetInterfaceKit_getDataRateMin, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRateMin(CPhidgetInterfaceKitHandle phid, int index, int *min);
+  attach_function :CPhidgetServo_create, [:phid], :int #int CPhidgetServo_create(CPhidgetServoHandle *phid);
+  attach_function :CPhidgetServo_getMotorCount, [:phid, :pointer], :int # int CPhidgetServo_getMotorCount(CPhidgetServoHandle phid, int *count);
+  attach_function :CPhidgetServo_getPosition, [:phid, :int, :pointer], :int #int CPhidgetServo_getPosition(CPhidgetServoHandle phid, int index, double *position);
+  attach_function :CPhidgetServo_setPosition, [:phid, :int, :double], :int #int CPhidgetServo_setPosition(CPhidgetServoHandle phid, int index, double position);
+  attach_function :CPhidgetServo_getPositionMax, [:phid, :int, :pointer], :int #int CPhidgetServo_getPositionMax(CPhidgetServoHandle phid, int index, double *max);
+  attach_function :CPhidgetServo_getPositionMin, [:phid, :int, :pointer], :int #int CPhidgetServo_getPositionMin(CPhidgetServoHandle phid, int index, double *min);
+  callback :CPhidgetServo_set_OnPositionChange_Callback, [:phid, :pointer, :int, :double], :int
+  attach_function :CPhidgetServo_set_OnPositionChange_Handler, [:phid, :CPhidgetServo_set_OnPositionChange_Callback, :pointer], :int #int CPhidgetServo_set_OnPositionChange_Handler(CPhidgetServoHandle phid, int ( *fptr)(CPhidgetServoHandle phid, void *userPtr, int index, double position), void *userPtr);
+  attach_function :CPhidgetServo_getEngaged, [:phid, :int, :pointer], :int #int CPhidgetServo_getEngaged(CPhidgetServoHandle phid, int index, int *engagedState);
+  attach_function :CPhidgetServo_setEngaged, [:phid, :int, :int], :int #int CPhidgetServo_setEngaged(CPhidgetServoHandle phid, int index, int engagedState);
+  attach_function :CPhidgetServo_getServoType, [:phid, :int, :pointer], :int #int CPhidgetServo_getServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType *servoType);
+  attach_function :CPhidgetServo_setServoType, [:phid, :int, ServoType], :int #int CPhidgetServo_setServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType servoType);
+  attach_function :CPhidgetServo_setServoParameters, [:phid, :int, :double, :double, :double], :int #int CPhidgetServo_setServoParameters(CPhidgetServoHandle phid, int index, double min_us,double max_us,double degrees);
+  
 end
