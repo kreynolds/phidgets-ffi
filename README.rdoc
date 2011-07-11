@@ -1,0 +1,49 @@
+=Phidgets-FFI
+
+This is a set of FFI bindings for the Phidgets21 library. Like every library, it only
+supports the devices that I needed it to but it supports them completely. There is a
+manager instance that lists attached devices, callbacks function perfectly, and there
+are a set of idiomatic bindings that take the FFI and make it more accessible. Raw FFI
+examples are in examples/ffi and the idiomatic versions are in examples/.
+
+==Quick Start
+
+To access the manager and see your attached devices:
+
+  Phidgets::Manager.new do |manager|
+    puts manager.devices.inspect
+  end
+  
+  [{
+    :type=>"PhidgetServo",
+    :label=>"",
+    :device_id=>:servo_1motor,
+    :serial_number=>12345,
+    :name=>"Phidget Servo Controller 1-motor",
+    :device_class=>:servo,
+    :version=>313
+  }]
+
+To access that servo controller and do something with the servo:
+
+  Phidgets::ServoController.new(12345) do |controller|
+    servo = controller.servos[0]
+
+    controller.on_change do |servo, position, data|
+      print "Moving servo #{servo.index} to #{position}\n"
+    end
+  
+    max = servo.max
+    10.times do
+      servo.position = rand(max)
+      sleep 1
+    end
+    servo.engaged = false
+  end
+
+==Notes
+
+Again, note that not every device is here. I'm more than happy to add support for it
+but I'll need a test device to make sure it works ;)
+
+PS. I'm serious, contact me if you want my mailing address.
