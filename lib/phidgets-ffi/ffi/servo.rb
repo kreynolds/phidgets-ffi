@@ -34,5 +34,17 @@ module Phidgets
     attach_function :CPhidgetServo_getServoType, [:phid, :int, :pointer], :int #int CPhidgetServo_getServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType *servoType);
     attach_function :CPhidgetServo_setServoType, [:phid, :int, ServoType], :int #int CPhidgetServo_setServoType(CPhidgetServoHandle phid, int index, CPhidget_ServoType servoType);
     attach_function :CPhidgetServo_setServoParameters, [:phid, :int, :double, :double, :double], :int #int CPhidgetServo_setServoParameters(CPhidgetServoHandle phid, int index, double min_us,double max_us,double degrees);
+
+    module CPhidgetServo
+      def self.method_missing(method, *args, &block)
+        if ::Phidgets::FFI.respond_to?("CPhidgetServo_#{method}".to_sym)
+          if (rs = ::Phidgets::FFI.send("CPhidgetServo_#{method}".to_sym, *args, &block)) != 0
+            raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
+          end
+        else
+          super(method, *args, &block)
+        end
+      end
+    end
   end
 end

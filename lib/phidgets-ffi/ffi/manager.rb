@@ -20,5 +20,17 @@ module Phidgets
     attach_function :CPhidgetManager_set_OnServerDisconnect_Handler, [:phidm, :CPhidgetManager_set_OnServerDisconnect_Callback, :user_ptr], :int #int CPhidgetManager_set_OnServerDisconnect_Handler(CPhidgetManagerHandle phidm, int ( *fptr)(CPhidgetManagerHandle phidm, void *userPtr), void *userPtr);
     attach_function :CPhidgetManager_getServerID, [:phidm, :pointer], :int #int CPhidgetManager_getServerID(CPhidgetManagerHandle phidm, const char **serverID);
     attach_function :CPhidgetManager_getServerAddress, [:phidm, :pointer, :pointer], :int#int CPhidgetManager_getServerAddress(CPhidgetManagerHandle phidm, const char **address, int *port);
+
+    module CPhidgetManager
+      def self.method_missing(method, *args, &block)
+        if ::Phidgets::FFI.respond_to?("CPhidgetManager_#{method}".to_sym)
+          if (rs = ::Phidgets::FFI.send("CPhidgetManager_#{method}".to_sym, *args, &block)) != 0
+            raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
+          end
+        else
+          super(method, *args, &block)
+        end
+      end
+    end
   end
 end

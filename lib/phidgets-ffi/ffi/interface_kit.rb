@@ -23,5 +23,17 @@ module Phidgets
     attach_function :CPhidgetInterfaceKit_setDataRate, [:phid, :int, :int], :int #int CPhidgetInterfaceKit_setDataRate(CPhidgetInterfaceKitHandle phid, int index, int milliseconds);
     attach_function :CPhidgetInterfaceKit_getDataRateMax, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRateMax(CPhidgetInterfaceKitHandle phid, int index, int *max);
     attach_function :CPhidgetInterfaceKit_getDataRateMin, [:phid, :int, :pointer], :int #int CPhidgetInterfaceKit_getDataRateMin(CPhidgetInterfaceKitHandle phid, int index, int *min);
+
+    module CPhidgetInterfaceKit
+      def self.method_missing(method, *args, &block)
+        if ::Phidgets::FFI.respond_to?("CPhidgetInterfaceKit_#{method}".to_sym)
+          if (rs = ::Phidgets::FFI.send("CPhidgetInterfaceKit_#{method}".to_sym, *args, &block)) != 0
+            raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
+          end
+        else
+          super(method, *args, &block)
+        end
+      end
+    end
   end
 end

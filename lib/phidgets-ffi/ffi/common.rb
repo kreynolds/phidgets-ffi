@@ -1,11 +1,5 @@
 module Phidgets
   module FFI
-    extend ::FFI::Library
-    ffi_lib '/Library/Frameworks/Phidget21.framework/Versions/Current/Phidget21'
-
-    typedef :pointer, :phid
-    typedef :pointer, :user_ptr
-
     attach_function :CPhidget_open, [:phid, :int], :int #int CPhidget_open(CPhidgetHandle phid, int serialNumber);
     attach_function :CPhidget_openLabel, [:phid, :string], :int #int CPhidget_openLabel(CPhidgetHandle phid, const char *label);
     attach_function :CPhidget_close, [:phid], :int #int CPhidget_close(CPhidgetHandle phid);
@@ -39,5 +33,17 @@ module Phidgets
     attach_function :CPhidget_set_OnWillSleep_Handler, [:CPhidget_set_OnWillSleep_Callback, :user_ptr], :int #int CPhidget_set_OnWillSleep_Handler(int( *fptr)(void *userPtr), void *userPtr);
     callback :CPhidget_set_OnWakeup_Callback, [:user_ptr], :int
     attach_function :CPhidget_set_OnWakeup_Handler, [:CPhidget_set_OnWakeup_Callback, :user_ptr], :int #int CPhidget_set_OnWakeup_Handler(int( *fptr)(void *userPtr), void *userPtr);
+
+    module Common
+      def self.method_missing(method, *args, &block)
+        if ::Phidgets::FFI.respond_to?("CPhidget_#{method}".to_sym)
+          if (rs = ::Phidgets::FFI.send("CPhidget_#{method}".to_sym, *args, &block)) != 0
+            raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
+          end
+        else
+          super(method, *args, &block)
+        end
+      end
+    end
   end
 end

@@ -14,7 +14,7 @@ def serial_number_for(device)
   ptr.get_int(0)
 end
 
-include PhidgetsFFI
+include Phidgets::FFI
 
 ifkit = FFI::MemoryPointer.new(:pointer, 1)
 if !(res = CPhidgetInterfaceKit_create(ifkit))

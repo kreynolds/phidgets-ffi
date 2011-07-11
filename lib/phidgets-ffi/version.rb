@@ -1,5 +1,5 @@
 module Phidgets
-  module Ffi
+  module FFI
     VERSION = "0.0.2"
   end
 end

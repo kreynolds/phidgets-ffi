@@ -1,5 +1,8 @@
 module Phidgets
   module FFI
+    typedef :pointer, :phid
+    typedef :pointer, :user_ptr
+        
     DeviceStatus = enum(
       :detached, 0,
       :attached
