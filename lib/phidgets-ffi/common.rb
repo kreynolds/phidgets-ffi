@@ -48,24 +48,27 @@ module Phidgets
       true
     end
     
-    def name
+    def self.name(handle)
       ptr = ::FFI::MemoryPointer.new(:string)
-      Phidgets::FFI::Common.getDeviceName(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceName(handle, ptr)
       strPtr = ptr.get_pointer(0)
       strPtr.null? ? nil : strPtr.read_string
     end
+    def name; Common.name(@handle); end
 
-    def serial_number
+    def self.serial_number(handle)
       ptr = ::FFI::MemoryPointer.new(:int)
-      Phidgets::FFI::Common.getSerialNumber(@handle, ptr)
+      Phidgets::FFI::Common.getSerialNumber(handle, ptr)
       ptr.get_int(0)
     end
+    def serial_number; Common.serial_number(@handle); end
 
-    def version
+    def self.version(handle)
       ptr = ::FFI::MemoryPointer.new(:int)
-      Phidgets::FFI::Common.getDeviceVersion(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceVersion(handle, ptr)
       ptr.get_int(0)
     end
+    def version; Common.version(@handle); end
 
     def attached?
       ptr = ::FFI::MemoryPointer.new(:int)
@@ -77,19 +80,21 @@ module Phidgets
       !attached?
     end
 
-    def type
+    def self.type(handle)
       ptr = ::FFI::MemoryPointer.new(:string)
-      Phidgets::FFI::Common.getDeviceType(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceType(handle, ptr)
       strPtr = ptr.get_pointer(0)
       strPtr.null? ? nil : strPtr.read_string
     end
+    def type; Common.type(@handle); end
 
-    def label
+    def self.label(handle)
       ptr = ::FFI::MemoryPointer.new(:string)
-      Phidgets::FFI::Common.getDeviceLabel(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceLabel(handle, ptr)
       strPtr = ptr.get_pointer(0)
       strPtr.null? ? nil : strPtr.read_string
     end
+    def label; Common.label(@handle); end
 
     def label=(new_label)
       Phidgets::FFI::Common.setDeviceLabel(@handle, new_label)
@@ -118,18 +123,20 @@ module Phidgets
       ptr.get_int(0)
     end
     
-    def device_id
+    def self.device_id(handle)
       ptr = ::FFI::MemoryPointer.new(:int)
-      Phidgets::FFI::Common.getDeviceID(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceID(handle, ptr)
       Phidgets::FFI::DeviceID[ptr.get_int(0)]
     end
+    def device_id; Common.device_id(@handle); end
     
-    def device_class
+    def self.device_class(handle)
       ptr = ::FFI::MemoryPointer.new(:int)
-      Phidgets::FFI::Common.getDeviceClass(@handle, ptr)
+      Phidgets::FFI::Common.getDeviceClass(handle, ptr)
       Phidgets::FFI::DeviceClass[ptr.get_int(0)]
     end
-
+    def device_class; Common.device_class(@handle); end
+    
     def on_attach(data=nil, &block)
       @on_attach = Proc.new { |handle, data_ptr|
         yield self, data_ptr
@@ -178,5 +185,18 @@ module Phidgets
       }
       Phidgets::FFI::Common.set_OnWakeup_Handler(@on_wake, data)
     end
+    
+    def self.attributes(handle)
+      {
+        :type => type(handle),
+        :name => name(handle),
+        :serial_number => serial_number(handle),
+        :version => version(handle),
+        :label => label(handle),
+        :device_class => device_class(handle),
+        :device_id => device_id(handle),
+      }
+    end
+    def attributes; Common.attributes(@handle); end
   end
 end
