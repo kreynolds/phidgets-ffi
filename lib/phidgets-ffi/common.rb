@@ -15,7 +15,20 @@ module Phidgets
     end
   end
 
+  module Utility
+    private
+    def object_for(obj_ptr)
+      (obj_ptr.null? ? nil : ObjectSpace._id2ref(obj_ptr.get_uint(0)))
+    end
+
+    def pointer_for(obj)
+      ::FFI::MemoryPointer.new(:uint).write_uint(obj.object_id)
+    end
+  end
+
   module Common
+    include Utility
+
     def create
       ptr = ::FFI::MemoryPointer.new(:pointer, 1)
       self.class::Klass.create(ptr)        
@@ -137,53 +150,60 @@ module Phidgets
     end
     def device_class; Common.device_class(@handle); end
     
-    def on_attach(data=nil, &block)
-      @on_attach = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_attach(obj=nil, &block)
+      @on_attach_obj = obj
+      @on_attach = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnAttach_Handler(@handle, @on_attach, data)
+      Phidgets::FFI::Common.set_OnAttach_Handler(@handle, @on_attach, pointer_for(obj))
     end
 
-    def on_detach(data=nil, &block)
-      @on_detach = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_detach(obj=nil, &block)
+      @on_detach_obj = obj
+      @on_detach = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnDetach_Handler(@handle, @on_detach, data)
+      Phidgets::FFI::Common.set_OnDetach_Handler(@handle, @on_detach, pointer_for(obj))
     end
 
-    def on_server_connect(data=nil, &block)
-      @on_server_connect = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_server_connect(obj=nil, &block)
+      @on_server_connect_obj = obj
+      @on_server_connect = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnServerConnect_Handler(@handle, @on_server_connect, data)
+      Phidgets::FFI::Common.set_OnServerConnect_Handler(@handle, @on_server_connect, pointer_for(obj))
     end
 
-    def on_server_disconnect(data=nil, &block)
-      @on_server_disconnect = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_server_disconnect(obj=nil, &block)
+      @on_server_disconnect_obj = obj
+      @on_server_disconnect = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnServerDisconnect_Handler(@handle, @on_server_disconnect, data)
+      Phidgets::FFI::Common.set_OnServerDisconnect_Handler(@handle, @on_server_disconnect, pointer_for(obj))
     end
 
-    def on_error(data=nil, &block)
-      @on_error = Proc.new { |handle, data_ptr, code, description|
-        yield self, data_ptr, code, description
+    def on_error(obj=nil, &block)
+      @on_error_obj = obj
+      @on_error = Proc.new { |handle, obj_ptr, code, description|
+        yield self, object_for(obj_ptr), code, description
       }
-      Phidgets::FFI::Common.set_OnError_Handler(@handle, @on_error, data)
+      Phidgets::FFI::Common.set_OnError_Handler(@handle, @on_error, pointer_for(obj))
     end
 
-    def on_sleep(data=nil, &block)
-      @on_sleep = Proc.new { |data_ptr|
-        yield data_ptr
+    def on_sleep(obj=nil, &block)
+      @on_sleep_obj = obj
+      @on_sleep = Proc.new { |obj_ptr|
+        yield object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnWillSleep_Handler(@on_sleep, data)
+      Phidgets::FFI::Common.set_OnWillSleep_Handler(@on_sleep, pointer_for(obj))
     end
 
-    def on_wake(data=nil, &block)
-      @on_wake = Proc.new { |data_ptr|
-        yield data_ptr
+    def on_wake(obj=nil, &block)
+      @on_wake_obj = obj
+      @on_wake = Proc.new { |obj_ptr|
+        yield object_for(obj_ptr)
       }
-      Phidgets::FFI::Common.set_OnWakeup_Handler(@on_wake, data)
+      Phidgets::FFI::Common.set_OnWakeup_Handler(@on_wake, pointer_for(obj))
     end
     
     def self.attributes(handle)

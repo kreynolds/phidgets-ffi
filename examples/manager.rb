@@ -2,7 +2,6 @@ require 'rubygems'
 require 'phidgets-ffi'
 
 Phidgets::Manager.new do |manager|
-  # There is no wait_for_attachment when it comes to the manage, you just have to wait a while
   puts manager.devices.inspect
 
   manager.on_attach do |device_ptr|

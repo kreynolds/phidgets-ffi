@@ -1,7 +1,8 @@
 module Phidgets
   class Manager
     Klass = Phidgets::FFI::CPhidgetManager
-    
+    include Utility
+
     def initialize(&block)
       if block_given?
         create
@@ -65,39 +66,44 @@ module Phidgets
       [address, port]
     end
     
-    def on_attach(data=nil, &block)
-      @on_attach = Proc.new { |handle, data_ptr|
-        yield data_ptr
+    def on_attach(obj=nil, &block)
+      @on_attach_obj = obj
+      @on_attach = Proc.new { |handle, obj_ptr|
+        yield object_for(obj_ptr)
       }
-      Klass.set_OnAttach_Handler(@handle, @on_attach, data)
+      Klass.set_OnAttach_Handler(@handle, @on_attach, pointer_for(obj))
     end
 
-    def on_detach(data=nil, &block)
-      @on_detach = Proc.new { |handle, data_ptr|
-        yield data_ptr
+    def on_detach(obj=nil, &block)
+      @on_detach_obj = obj
+      @on_detach = Proc.new { |handle, obj_ptr|
+        yield object_for(obj_ptr)
       }
-      Klass.set_OnDetach_Handler(@handle, @on_detach, data)
+      Klass.set_OnDetach_Handler(@handle, @on_detach, pointer_for(obj))
     end
 
-    def on_server_connect(data=nil, &block)
-      @on_server_connect = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_server_connect(obj=nil, &block)
+      @on_server_connect_obj = obj
+      @on_server_connect = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_pointer)
       }
-      Klass.set_OnServerConnect_Handler(@handle, @on_server_connect, data)
+      Klass.set_OnServerConnect_Handler(@handle, @on_server_connect, pointer_for(obj))
     end
 
-    def on_server_disconnect(data=nil, &block)
-      @on_server_disconnect = Proc.new { |handle, data_ptr|
-        yield self, data_ptr
+    def on_server_disconnect(obj=nil, &block)
+      @on_server_disconnect_obj = obj
+      @on_server_disconnect = Proc.new { |handle, obj_ptr|
+        yield self, object_for(obj_ptr)
       }
-      Klass.set_OnServerDisconnect_Handler(@handle, @on_server_disconnect, data)
+      Klass.set_OnServerDisconnect_Handler(@handle, @on_server_disconnect, pointer_for(obj))
     end
 
-    def on_error(data=nil, &block)
-      @on_error = Proc.new { |handle, data_ptr, code, description|
-        yield self, data_ptr, code, description
+    def on_error(obj=nil, &block)
+      @on_error_obj = obj
+      @on_error = Proc.new { |handle, obj_ptr, code, description|
+        yield self, object_for(obj_ptr), code, description
       }
-      Klass.set_OnError_Handler(@handle, @on_error, data)
+      Klass.set_OnError_Handler(@handle, @on_error, pointer_for(obj))
     end
   end
 end

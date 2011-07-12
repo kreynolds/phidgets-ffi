@@ -18,11 +18,12 @@ module Phidgets
       end
     end
     
-    def on_change(data=nil, &block)
-      @on_change = Proc.new { |device, data_ptr, index, position|
-        yield @servos[index], position, data_ptr
+    def on_change(obj=nil, &block)
+      @on_change_obj = obj
+      @on_change = Proc.new { |device, obj_ptr, index, position|
+        yield @servos[index], position, object_for(obj_ptr)
       }
-      Klass.set_OnPositionChange_Handler(@handle, @on_change, data)
+      Klass.set_OnPositionChange_Handler(@handle, @on_change, pointer_for(obj))
     end
 
     private
