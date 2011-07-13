@@ -1,5 +1,6 @@
 module Phidgets
   module FFI
+    class Error < Exception; end
     attach_function :CPhidget_open, [:phid, :int], :int #int CPhidget_open(CPhidgetHandle phid, int serialNumber);
     attach_function :CPhidget_openLabel, [:phid, :string], :int #int CPhidget_openLabel(CPhidgetHandle phid, const char *label);
     attach_function :CPhidget_close, [:phid], :int #int CPhidget_close(CPhidgetHandle phid);

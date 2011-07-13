@@ -9,6 +9,7 @@ require 'phidgets-ffi/ffi/servo'
 require 'phidgets-ffi/ffi/interface_kit'
 
 require 'phidgets-ffi/common'
+require 'phidgets-ffi/log'
 require 'phidgets-ffi/error'
 require 'phidgets-ffi/manager'
 require 'phidgets-ffi/servo'

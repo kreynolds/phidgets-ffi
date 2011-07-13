@@ -16,9 +16,9 @@ module Phidgets
     module Log
       def self.log(loglevel, identifier, message, *args)
         if !args.empty?
-          CPhidget_log(loglevel, identifier, message, *args.to_varargs)
+          ::Phidgets::FFI::CPhidget_log(loglevel, identifier, message, *args.to_varargs)
         else
-          CPhidget_log(loglevel, identifier, message)
+          ::Phidgets::FFI::CPhidget_log(loglevel, identifier, message)
         end
       end
       
