@@ -1,9 +1,14 @@
+=What are Phidgets?
+
+Phidgets are a set of "plug and play" building blocks for low cost USB sensing and control from your PC
+available from http://www.phidgets.com. 
+
 =Phidgets-FFI
 
-This is a set of FFI bindings for the Phidgets21 library. Like every library, it only
-supports the devices that I needed it to but it supports them completely. There is a
-manager instance that lists attached devices, callbacks function perfectly, and there
-are a set of idiomatic bindings that take the FFI and make it more accessible. Raw FFI
+This is a set of FFI bindings for the Phidgets library available for most platforms.
+Currently, it only supports the devices available to me but it to but it supports them completely.
+It also supports the manager, dictionary, logging, callbacks function perfectly, and there
+are a set of idiomatic bindings that take the provided API and make it more accessible. Raw FFI
 examples are in examples/ffi and the idiomatic versions are in examples/.
 
 ==Quick Start
@@ -56,4 +61,4 @@ There are additional examples of each in the examples/ directory.
 Again, note that not every device is here. I'm more than happy to add support for it
 but I'll need a test device to make sure it works ;)
 
-PS. I'm serious, contact me if you want my mailing address.
+P.S. Seriously, contact me if you want my mailing address to send me a device you'd like this library to support.
