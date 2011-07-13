@@ -41,6 +41,16 @@ To access that servo controller and do something with the servo:
     servo.engaged = false
   end
 
+==Logging
+
+Logging can be accomplished by either accessing the C library directly or using the idiomatic method.
+There are additional examples of each in the examples/ directory.
+
+  Phidgets::Log.enable(:verbose, nil)
+  Phidgets::Log.info('identifier', 'message')
+  Phidgets::Log.error('identifier', 'message')
+  Phidgets::Log.disable
+
 ==Notes
 
 Again, note that not every device is here. I'm more than happy to add support for it
