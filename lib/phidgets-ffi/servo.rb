@@ -18,6 +18,12 @@ module Phidgets
       end
     end
     
+    def attributes
+      super.merge({
+        :servos => servos.size,
+      })
+    end
+
     def on_change(obj=nil, &block)
       @on_change_obj = obj
       @on_change = Proc.new { |device, obj_ptr, index, position|
@@ -57,7 +63,7 @@ module Phidgets
     
     def engaged=(val)
       tmp = val ? 1 : 0
-      Klass.setEngaged(@handle, 0, tmp)
+      Klass.setEngaged(@handle, @index, tmp)
 
       val
     end

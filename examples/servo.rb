@@ -3,7 +3,7 @@ require 'phidgets-ffi'
 
 puts "Library Version: #{Phidgets::FFI.library_version}"
 Phidgets::ServoController.new(-1) do |controller|
-  puts "Servos attached: #{controller.servos.size}"
+  puts "Device Attributes: #{controller.attributes.inspect}"
   servo = controller.servos[0]
   puts "Current Type: #{servo.type}"
   puts "Default Min/Max: #{servo.min}/#{servo.max}"
