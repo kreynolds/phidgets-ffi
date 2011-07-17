@@ -3,6 +3,11 @@ module Phidgets
     typedef :pointer, :phid
     typedef :pointer, :user_ptr
         
+    ServerStatus = enum(
+      :disconnected, 0,
+      :connected
+    )
+
     DeviceStatus = enum(
       :detached, 0,
       :attached
