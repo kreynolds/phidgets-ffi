@@ -4,7 +4,10 @@ module Phidgets
     Klass = Phidgets::FFI::CPhidgetDictionary
     include Utility
     
+    attr_accessor :key_sleep, :handler_sleep
+
     def initialize(options={}, &block)
+      @key_sleep, @handler_sleep = 0.1, 0.5
       @listeners = {}
       @options = {:address => 'localhost', :port => 5001, :server_id => nil, :password => nil}.merge(options)
 
@@ -49,9 +52,12 @@ module Phidgets
       # If we are assigning something to nil, let's remove it
       if val.nil?
         delete(key)
+        sleep @key_sleep.to_f
+        val
       else
         persistent = (persistent ? 1 : 0)
         Klass.addKey(@handle, key.to_s, val.to_s, persistent)
+        sleep @key_sleep.to_f
         val.to_s
       end
     end
@@ -78,7 +84,7 @@ module Phidgets
           begin
             next if status != :connected
             Klass.set_OnKeyChange_Handler(@handle, listener, pattern, proc, pointer_for(obj))              
-            sleep 0.5
+            sleep @handler_sleep
           rescue
             Phidgets::Log.error("#{self.class}::on_connect", $!.to_s)
           end
@@ -86,6 +92,7 @@ module Phidgets
         yield object_for(obj_ptr)
       }
       Klass.set_OnServerConnect_Handler(@handle, @on_connect, pointer_for(obj))
+      sleep @handler_sleep
     end
     
     def on_disconnect(obj=nil, &block)
@@ -94,10 +101,12 @@ module Phidgets
         # On disconnect, we'll need to remove all of our change handlers
         @listeners.each_pair do |pattern, (listener, proc)|
           Klass.remove_OnKeyChange_Handler(listener.get_pointer(0))
+          sleep @handler_sleep
         end
         yield object_for(obj_ptr)
       }
       Klass.set_OnServerDisconnect_Handler(@handle, @on_disconnect, pointer_for(obj))
+      sleep @handler_sleep
     end
     
     def on_error(obj=nil, &block)
@@ -106,6 +115,7 @@ module Phidgets
         yield object_for(obj_ptr), code, error
       }
       Klass.set_OnError_Handler(@handle, @on_error, pointer_for(obj))
+      sleep @handler_sleep
     end
 
 
@@ -118,7 +128,7 @@ module Phidgets
         }
       ]
       Klass.set_OnKeyChange_Handler(@handle, @listeners[pattern][0], pattern, @listeners[pattern][1], pointer_for(obj))
-      sleep 0.5
+      sleep @handler_sleep
     end
 
     def remove_on_change(pattern)
@@ -126,7 +136,7 @@ module Phidgets
       if @listeners.has_key?(pattern)
         listener, proc = @listeners.delete(pattern)
         Klass.remove_OnKeyChange_Handler(listener.get_pointer(0))
-        sleep 0.5
+        sleep @handler_sleep
         true
       else
         nil

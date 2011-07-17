@@ -46,6 +46,42 @@ To access that servo controller and do something with the servo:
     servo.engaged = false
   end
 
+==Dictionary
+
+The Dictionary service is a web service that functions as a remote key/value store with optional persistence and change handlers.
+There are two sleep variables that determine how long to wait after registering a handler, and how long to wait after getting/setting a key.
+If handlers or keys are set too rapidly, the library will segfault. Also note that the keys appear to cause segfault if a space is used in the key.
+
+  Phidgets::Dictionary.new do |dict|
+    dict.on_error do |obj, code, reason|
+      puts "Error (#{code}): #{reason}"
+    end
+    dict.on_connect do |obj|
+      print "Connected!\n"
+    end
+    dict.on_disconnect do |obj|
+      print "Disconnected!\n"
+    end
+    dict.on_error do |obj, code, reason|
+      puts "Error (#{code}): #{reason}"
+    end
+
+    dict.on_change(/temp.*/) do |obj, key, val, reason|
+        print "#{key}: #{val}\n" if reason != :unchanged
+    end
+    dict.on_change('switch') do |obj, key, val, reason|
+      print "#{key} is now #{val == "1" ? 'on' : 'off'}\n" if reason != :unchanged
+    end
+
+    puts "Listening to: #{dict.listeners.inspect}"
+    dict["temp_1"] = 15
+    dict["temp_2"] = 20
+    dict["temp_2"] = 20
+    dict["switch_a"] = 1
+    dict["switch_b"] = 1
+    dict["switch_b"] = 0
+  end
+
 ==Logging
 
 Logging can be accomplished by either accessing the C library directly or using the idiomatic method.
