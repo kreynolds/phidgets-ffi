@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'phidgets-ffi'
-require File.dirname(__FILE__) + '/../lib/phidgets-ffi/dictionary'
+
 Phidgets::Log.enable(:verbose)
 
 puts "Library Version: #{Phidgets::FFI.library_version}"
