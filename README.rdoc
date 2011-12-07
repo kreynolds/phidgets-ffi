@@ -24,7 +24,7 @@ The RubyDoc API manual contains calls and events for every type of Phidget and c
 To install:
   gem install phidgets-ffi
 
-phidgets-ffi is dependent on the ffi(>=1.0.9) gem. If the above command does not automatically install the gems for you, please enter:
+phidgets-ffi is dependent on the ffi(>=1.0.9) gem. If the above command does not automatically install the gem for you, please enter:
   gem install ffi
 
 ==Coding for your Phidget
