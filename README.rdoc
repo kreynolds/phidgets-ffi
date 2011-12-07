@@ -12,7 +12,7 @@ Idiomatic examples are in examples/ and the Raw FFI examples are in examples/raw
 ==Environment and Libraries
 First, we need to set up the proper environment and get the necessary files off the Phidgets website. Visit the drivers section at www.phidgets.com and get the latest Phidget driver for your system. You will also need to install the phidgets-ffi gem from RubyGems. More information will be provided in the "Installing the phidgets-ffi gem" section of this document.
 
-We also recommend that you download the following reference materials from the programming section:
+We also recommend that you download the following reference materials from the {programming section}[http://www.phidgets.com/programming_resources.php]:
 * RubyDoc API Documentation
 * Programming Manual
 * The Product Manual for your device
