@@ -38,13 +38,12 @@ lcd.on_attach  do |device, obj|
 	device.screens[0].cursor_blink  = true
 	sleep 1
 
-	puts 'wah'
 	puts device.screens[0].inspect
 
 end
 	 
 lcd.on_detach  do |device, obj|
-	puts "#{device.attributes.inspect} detached\n"
+	puts "#{device.attributes.inspect} detached"
 end
 
 lcd.on_error do |device, obj, code, description|
