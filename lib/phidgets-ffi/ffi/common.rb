@@ -45,10 +45,7 @@ module Phidgets
     attach_function :CPhidget_set_OnError_Handler, [:phid, :CPhidget_set_OnError_Callback, :user_ptr], :int
     
 
-	require 'sys/uname'
-	os_name = Sys::Uname.sysname
-	parsed_os_name = os_name.downcase
-	if parsed_os_name.include? "darwin" #Mac OS X
+	if Config::CONFIG['target_os'] =~ /darwin/ #Mac OS X
 		callback :CPhidget_set_OnWillSleep_Callback, [:user_ptr], :int
 		attach_function :CPhidget_set_OnWillSleep_Handler, [:CPhidget_set_OnWillSleep_Callback, :user_ptr], :int
 		callback :CPhidget_set_OnWakeup_Callback, [:user_ptr], :int
