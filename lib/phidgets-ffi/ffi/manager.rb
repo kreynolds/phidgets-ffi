@@ -1,10 +1,7 @@
 module Phidgets
   module FFI
 
-	require 'sys/uname'
-	os_name = Sys::Uname.sysname
-	parsed_os_name = os_name.downcase
-	if parsed_os_name.include? "darwin" #Mac OS X
+	if Config::CONFIG['target_os'] =~ /darwin/ #Mac OS X
 		FFI_POINTER_SIZE = 4  
     else  #Linux
 		FFI_POINTER_SIZE = 8  
