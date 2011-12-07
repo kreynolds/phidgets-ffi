@@ -2,35 +2,50 @@ require 'rubygems'
 require 'phidgets-ffi'
 
 puts "Library Version: #{Phidgets::FFI.library_version}"
-Phidgets::ServoController.new(-1) do |controller|
-  puts "Device Attributes: #{controller.attributes.inspect}"
-  servo = controller.servos[0]
-  puts "Current Type: #{servo.type}"
-  puts "Default Min/Max: #{servo.min}/#{servo.max}"
-  puts "Device Name: #{controller.name}"
-  puts "Device Type: #{controller.type}"
-  puts "Device SN: #{controller.serial_number}"
-  puts "Device Version: #{controller.version}"
 
-  puts "Device Label: #{controller.label}"
-  controller.on_change do |servo, position, obj|
-    print "Moving servo #{servo.index} to #{position}\n"
-  end
-  
-  controller.on_detach do |obj, data|
-    print "Detached #{obj.type}\n"
-  end
+servo = Phidgets::Servo.new
+	  
+puts "Wait for PhidgetServo to attached..."
 
-  controller.on_attach do |obj, data|
-    print "Attached #{obj.type}\n"
-  end
+#The following method runs when the PhidgetServo is attached to the system
+servo.on_attach  do |device, obj|
+	 
+    puts "Device attributes: #{device.attributes} attached"
+    puts "Class: #{device.device_class}"
+	puts "Id: #{device.id}"
+	puts "Serial number: #{device.serial_number}"
+	puts "Version: #{device.version}"
+	puts "# Servos: #{device.servos.size}"
 
-  max = servo.max
-  10.times do
-    controller.wait_for_attachment
-    servo.position = rand(max)
-    sleep 0.5
-  end
-  servo.engaged = false
+	device.servos[0].engaged = true
+	device.servos[0].type = Phidgets::FFI::ServoType[:default]
+	puts "Setting servo parameters: #{device.servos[0].set_servo_parameters(600, 2000, 120)}"
+	sleep 1
+
+end
+	 
+servo.on_detach  do |device, obj|
+	puts "#{device.attributes.inspect} detached"
 end
 
+servo.on_error do |device, obj, code, description|
+	puts "Error #{code}: #{description}"
+end
+
+servo.on_position_change do |device, motor, position|
+	puts "Moving servo #{motor.index} to #{position}"
+end
+
+sleep 5
+
+if servo.attached?
+	max = servo.servos[0].position_max
+	3.times do
+		servo.servos[0].position = rand(max)
+		sleep 1
+	end
+end
+
+servo.servos[0].engaged = false
+sleep 1
+servo.close

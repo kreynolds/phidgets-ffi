@@ -8,14 +8,16 @@ manager = ptr.get_pointer(0)
 CPhidgetManager.open(manager)
 
 sleep(1)
-devices_ptr, count = FFI::MemoryPointer.new(:pointer, 1), FFI::MemoryPointer.new(:int)
+devices_ptr, count = FFI::MemoryPointer.new(:pointer, 70), FFI::MemoryPointer.new(:int)
 CPhidgetManager.getAttachedDevices(manager, devices_ptr, count)
+
 devices = devices_ptr.get_array_of_pointer(0, count.get_int(0))
 
 ptr1 = FFI::MemoryPointer.new(:string)
 ptr2 = FFI::MemoryPointer.new(:int)
-devices.each_with_index do |device, i|
-  device = device.get_pointer(0)
+
+count.get_int(0).times do |i|
+  device = devices[0].get_pointer(i*4)
 
   Common.getDeviceName(device, ptr1)
   name =  ptr1.get_pointer(0).read_string
