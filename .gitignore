@@ -1,3 +1,6 @@
 pkg/*
 *.gem
 .bundle
+.svn/
+.yardoc/
+.doc/
