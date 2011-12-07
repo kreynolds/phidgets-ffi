@@ -89,7 +89,8 @@ module Phidgets
 
         device_array = []
         count.get_int(0).times do |i|
-            device_array[i] = devices[0].get_pointer(i*4)
+			device_array[i] = devices[0].get_pointer(i*Phidgets::FFI::FFI_POINTER_SIZE)
+			
         end
         
         #Klass.freeAttachedDevicesArray(devices_ptr) #error

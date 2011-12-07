@@ -1,6 +1,16 @@
 module Phidgets
   module FFI
-    typedef :pointer, :phidm
+
+	require 'sys/uname'
+	os_name = Sys::Uname.sysname
+	parsed_os_name = os_name.downcase
+	if parsed_os_name.include? "darwin" #Mac OS X
+		FFI_POINTER_SIZE = 4  
+    else  #Linux
+		FFI_POINTER_SIZE = 8  
+	end
+	
+	typedef :pointer, :phidm
 
     attach_function :CPhidgetManager_create, [:phidm], :int 
     attach_function :CPhidgetManager_open, [:phidm], :int 

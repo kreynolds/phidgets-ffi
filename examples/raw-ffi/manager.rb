@@ -17,8 +17,9 @@ ptr1 = FFI::MemoryPointer.new(:string)
 ptr2 = FFI::MemoryPointer.new(:int)
 
 count.get_int(0).times do |i|
-  device = devices[0].get_pointer(i*4)
-
+  device = devices[0].get_pointer(i*4)     #On Mac OS X, it is i*4
+#  device = devices[0].get_pointer(i*4)    #On Linux, it is i*8
+  
   Common.getDeviceName(device, ptr1)
   name =  ptr1.get_pointer(0).read_string
 
