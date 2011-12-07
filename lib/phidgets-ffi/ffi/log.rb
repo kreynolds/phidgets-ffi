@@ -9,9 +9,9 @@ module Phidgets
       :verbose
     )
 
-    attach_function :CPhidget_enableLogging, [LogLevel, :string], :int #int CPhidget_enableLogging(CPhidgetLog_level level, const char *outputFile);
-    attach_function :CPhidget_disableLogging, [], :int #int CPhidget_disableLogging();
-    attach_function :CPhidget_log, [LogLevel, :string, :string, :varargs], :int #int CPhidget_log(CPhidgetLog_level level, const char *id, const char *message, ...);
+    attach_function :CPhidget_enableLogging, [LogLevel, :string], :int 
+    attach_function :CPhidget_disableLogging, [], :int
+    attach_function :CPhidget_log, [LogLevel, :string, :string, :varargs], :int 
 
     module Log
       def self.log(loglevel, identifier, message, *args)
@@ -23,11 +23,12 @@ module Phidgets
       end
       
       def self.method_missing(method, *args, &block)
+	 
         if ::Phidgets::FFI.respond_to?("CPhidget_#{method}".to_sym)
-          if (rs = ::Phidgets::FFI.send("CPhidget_#{method}".to_sym, *args, &block)) != 0
-            raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
+	     if (rs = ::Phidgets::FFI.send("CPhidget_#{method}".to_sym, *args, &block)) != 0
+			raise Phidgets::Error.exception_for(rs), Phidgets::FFI.error_description(rs)
           end
-        else
+        else  
           super(method, *args, &block)
         end
       end

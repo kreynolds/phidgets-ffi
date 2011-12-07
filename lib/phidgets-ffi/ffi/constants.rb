@@ -1,5 +1,6 @@
 module Phidgets
   module FFI
+
     typedef :pointer, :phid
     typedef :pointer, :user_ptr
         
@@ -65,7 +66,7 @@ module Phidgets
       :spatial_accel_gyro_compass, 0x033,
       :temperature_sensor, 0x070,
       :temperature_sensor_4, 0x032,
-      :sensor_ir, 0x03C,
+	  :temperature_sensor_ir, 0x03C,
       :textlcd_2x20_w_8_8_8, 0x17D,
       :textlcd_adapter, 0x03D,
       :unipolar_stepper_4motor, 0x07A,
@@ -110,5 +111,6 @@ module Phidgets
       :bad_version,
       :error_code_count
     )
+	
   end
 end
