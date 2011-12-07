@@ -7,7 +7,7 @@ available from http://www.phidgets.com.
 
 This is a set of FFI bindings for the Phidgets library available for Mac OS X and Linux.
 There are a set of idiomatic bindings that take the provided API and make it more accessible. 
-Idiomatic versions are in examples/ and the Raw FFI examples are in examples/raw-ffi.
+Idiomatic examples are in examples/ and the Raw FFI examples are in examples/raw-ffi.
 
 ==Environment and Libraries
 First, we need to set up the proper environment and get the necessary files off the Phidgets website. Visit the drivers section at www.phidgets.com and get the latest Phidget driver for your system. You will also need to install the phidgets-ffi gem from RubyGems. More information will be provided in the "Installing the phidgets-ffi gem" section of this document.
