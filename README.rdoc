@@ -13,12 +13,12 @@ Idiomatic examples are in examples/ and the Raw FFI examples are in examples/raw
 First, we need to set up the proper environment and get the necessary files off the Phidgets website. Visit the drivers section at www.phidgets.com and get the latest Phidget driver for your system. You will also need to install the phidgets-ffi gem from RubyGems. More information will be provided in the "Installing the phidgets-ffi gem" section of this document.
 
 We also recommend that you download the following reference materials:
-* {Programming Manual}[http://www.phidgets.com/programming_resources.php]:
-* The {Product Manual}[http://www.phidgets.com] for your device
+* {General Phidget Programming}[http://www.phidgets.com/docs/General_Phidget_Programming]
+* The {User Guide}[http://www.phidgets.com/docs/Category:UserGuide] for your device
 * {RubyDoc API Documentation}[http://rubydoc.info/gems/phidgets-ffi/frames]
 * {Ruby code samples}[https://github.com/kreynolds/phidgets-ffi/tree/master/examples]
 
-The RubyDoc API manual contains calls and events for every type of Phidget and can be used as a reference. You can find a high level discussion about programming with Phidgets in general in the Programming Manual. The Product manual for your device also contains an API section that describes limitations, defaults, and implementation details specific to your Phidget. You may want to have these manuals open while working through these instructions.
+The RubyDoc API manual contains calls and events for every type of Phidget and can be used as a reference. You can find a high level discussion about programming with Phidgets in general on the General Phidget Programming page. The user guide for your device also contains an API section that describes limitations, defaults, and implementation details specific to your Phidget. You may want to have these pages open while working through these instructions.
 
 ==Installing the phidgets-ffi gem
 To install:
