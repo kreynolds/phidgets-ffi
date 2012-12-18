@@ -51,10 +51,10 @@ module Phidgets
     # @return [Boolean] returns true or raises an error
     def on_tag(obj=nil, &block)
 	  @on_tag_obj = obj
-      @on_tag = Proc.new { |device, obj_ptr, tag|
-		yield self, convert_int_to_hex(tag), object_for(obj_ptr)
+      @on_tag = Proc.new { |device, obj_ptr, tag, proto|
+		yield self, tag.read_string, object_for(obj_ptr)
 	}
-      Klass.set_OnTag_Handler(@handle, @on_tag, pointer_for(obj))
+      Klass.set_OnTag2_Handler(@handle, @on_tag, pointer_for(obj))
     end
 	
     # Sets a tag lost handler callback function. This is called when a tag is removed from the reader
@@ -69,10 +69,10 @@ module Phidgets
     # @return [Boolean] returns true or raises an error
     def on_tag_lost(obj=nil, &block)
 	  @on_tag_lost_obj = obj
-      @on_tag_lost = Proc.new { |device, obj_ptr, tag|
-	    yield self, convert_int_to_hex(tag), object_for(obj_ptr)
+      @on_tag_lost = Proc.new { |device, obj_ptr, tag, proto|
+	    yield self, tag.read_string, object_for(obj_ptr)
 	}
-      Klass.set_OnTagLost_Handler(@handle, @on_tag_lost, pointer_for(obj))
+      Klass.set_OnTagLost2_Handler(@handle, @on_tag_lost, pointer_for(obj))
     end
 
     # Returns the antenna state of the Phidget.
@@ -115,11 +115,21 @@ module Phidgets
     #
     # @return [String] returns the last tag or raises an error
     def last_tag
-	  tag_size = 5
-	  tag_ffi = ::FFI::MemoryPointer.new(:uchar, tag_size)
-      Klass.getLastTag(@handle, tag_ffi)
-
-      convert_int_to_hex(tag_ffi)	  
+      tag = ::FFI::MemoryPointer.new(:string)
+	  proto = ::FFI::MemoryPointer.new(:int)
+      Klass.getLastTag2(@handle, tag, proto)
+      strPtr = tag.get_pointer(0)
+      strPtr.null? ? nil : strPtr.read_string
+	end
+	
+	# Returns the protocol of the last tag read by the reader. This may or may not still be on the reader - use {Phidgets::RFID#tag_present} to find out.
+    #
+    # @return [Phidgets::FFI::RFIDTagProtocol] returns the last tag protocol or raises an error
+    def last_tag_protocol
+      tag = ::FFI::MemoryPointer.new(:string)
+	  proto = ::FFI::MemoryPointer.new(:int)
+      Klass.getLastTag2(@handle, tag, proto)
+      Phidgets::FFI::RFIDTagProtocol[proto.get_int(0)]
 	end
 	
 	# Returns the value indicating whether or not a tag is on the reader.
@@ -130,6 +140,18 @@ module Phidgets
       Klass.getTagStatus(@handle, ptr)
       (ptr.get_int(0) == 0) ? false : true
     end
+	
+	# Writes to a tag.
+	#
+	# @param [String] tag Tag data to write. See product manual for formatting.
+	# @param [Phidgets::FFI::RFIDTagProtocol] protocol Tag Protocol to use.
+	# @param [Boolean] lock Lock the tag from further writes
+	# @return [Boolean] returns true or raises an error
+	def write(tag, protocol, lock=false)
+      tmp = lock ? 1 : 0
+	  Klass.write(@handle, tag,  Phidgets::FFI::RFIDTagProtocol[protocol], tmp)
+	  true
+	end
 	
   # This class represents an digital output for a PhidgetRFID All the properties of an digital output are stored and modified in this class.
   class RFIDOutputs
@@ -197,22 +219,10 @@ module Phidgets
       end
     end
 	
-	def convert_int_to_hex(int_tag)
-		tag_string = []
-		5.times { |i|
-			if int_tag[i].get_uchar(0).to_s(16).size == 1  #ruby removes leading 0, so we will put the 0 back in.
-				tag_string[i] = "0#{int_tag[i].get_uchar(0).to_s(16)}"
-			else
-				tag_string[i] = int_tag[i].get_uchar(0).to_s(16)
-			end
-		}
-		tag_string
-	end
-	
 	def remove_specific_event_handlers
 	   Klass.set_OnOutputChange_Handler(@handle, nil, nil)
-	   Klass.set_OnTag_Handler(@handle, nil, nil)
-	   Klass.set_OnTagLost_Handler(@handle, nil, nil)
+	   Klass.set_OnTag2_Handler(@handle, nil, nil)
+	   Klass.set_OnTagLost2_Handler(@handle, nil, nil)
 	end
 	
   end

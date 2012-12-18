@@ -18,8 +18,10 @@ module Phidgets
 	
 	attach_function :CPhidgetLED_create, [:phid], :int
     attach_function :CPhidgetLED_getLEDCount, [:phid, :pointer], :int 
-    attach_function :CPhidgetLED_getDiscreteLED, [:phid, :int, :pointer], :int 
-	attach_function :CPhidgetLED_setDiscreteLED, [:phid, :int, :int], :int 
+    attach_function :CPhidgetLED_getBrightness, [:phid, :int, :pointer], :int
+	attach_function :CPhidgetLED_setBrightness, [:phid, :int, :double], :int
+    attach_function :CPhidgetLED_getCurrentLimitIndexed, [:phid, :int, :pointer], :int
+	attach_function :CPhidgetLED_setCurrentLimitIndexed, [:phid, :int, :double], :int
     attach_function :CPhidgetLED_getCurrentLimit, [:phid, :pointer], :int 
 	attach_function :CPhidgetLED_setCurrentLimit, [:phid, LEDCurrentLimit], :int     
     attach_function :CPhidgetLED_getVoltage, [:phid, :pointer], :int 

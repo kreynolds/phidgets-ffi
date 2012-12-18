@@ -66,24 +66,39 @@ module Phidgets
       "#<#{self.class} @index=#{index}, @brightness=#{brightness}>"
 	end
 
-	# @return [Integer] returns the index of the servo motor, or raises an error.
+	# @return [Integer] returns the index of the led, or raises an error.
 	def index 
 		@index
 	end
 	
-	# @return [Integer] returns the brightness level of an LED, or raises an error.
+	# @return [Float] returns the brightness level of an LED, or raises an error.
     def brightness
-      ptr = ::FFI::MemoryPointer.new(:int)
-      Klass.getDiscreteLED(@handle, @index, ptr)
+      ptr = ::FFI::MemoryPointer.new(:double)
+      Klass.getBrightness(@handle, @index, ptr)
       ptr.get_int(0)
     end
 
 	# Sets the brightness level of an LED, or raises an error. Brightness levels range from 0-100
-	# @param [Integer] new_brightness new brightness
-	# @return [Integer] returns the brightness of an LED, or raises an error.
+	# @param [Float] new_brightness new brightness
+	# @return [Float] returns the brightness of an LED, or raises an error.
     def brightness=(new_brightness)
-      Klass.setDiscreteLED(@handle, @index, new_brightness.to_i)
-      new_brightness.to_i
+      Klass.setBrightness(@handle, @index, new_brightness.to_f)
+      new_brightness.to_f
+    end
+	
+	# @return [Float] returns the current limit of an LED, or raises an error.
+    def current_limit
+      ptr = ::FFI::MemoryPointer.new(:double)
+      Klass.getCurrentLimitIndexed(@handle, @index, ptr)
+      ptr.get_int(0)
+    end
+
+	# Sets the current limit of an LED, or raises an error. Current Limit levels range from 0-80 mA
+	# @param [Float] new_current_limit new current limit
+	# @return [Float] returns the current limit of an LED, or raises an error.
+    def current_limit=(new_current_limit)
+      Klass.setCurrentLimitIndexed(@handle, @index, new_current_limit.to_f)
+      new_current_limit.to_f
     end
 	
   end #LEDOutputs

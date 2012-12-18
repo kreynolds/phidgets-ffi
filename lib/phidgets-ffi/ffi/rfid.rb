@@ -1,6 +1,12 @@
 module Phidgets
   module FFI
-
+  
+   RFIDTagProtocol = enum(
+      :EM4100, 1,
+      :ISO11785_FDX_B,
+      :PhidgetTAG
+    )
+	
 	attach_function :CPhidgetRFID_create, [:phid], :int
 	attach_function :CPhidgetRFID_getOutputCount, [:phid, :pointer], :int    
 	attach_function :CPhidgetRFID_getOutputState, [:phid, :int, :pointer], :int    
@@ -9,17 +15,18 @@ module Phidgets
     attach_function :CPhidgetRFID_setAntennaOn, [:phid, :int], :int 
 	attach_function :CPhidgetRFID_getLEDOn, [:phid, :pointer], :int    
     attach_function :CPhidgetRFID_setLEDOn, [:phid, :int], :int 
-	attach_function :CPhidgetRFID_getLastTag, [:phid, :pointer], :int    
-    attach_function :CPhidgetRFID_getTagStatus, [:phid, :pointer], :int 	
+	attach_function :CPhidgetRFID_getLastTag2, [:phid, :pointer, :pointer], :int
+    attach_function :CPhidgetRFID_getTagStatus, [:phid, :pointer], :int
+	attach_function :CPhidgetRFID_write, [:phid, :pointer, RFIDTagProtocol, :int], :int
 	
 	callback :CPhidgetRFID_set_OnOutputChange_Callback, [:phid, :user_ptr, :int, :int], :int
     attach_function :CPhidgetRFID_set_OnOutputChange_Handler, [:phid, :CPhidgetRFID_set_OnOutputChange_Callback, :user_ptr], :int 
 	
-	callback :CPhidgetRFID_set_OnTag_Callback, [:phid, :user_ptr, :pointer], :int 
-    attach_function :CPhidgetRFID_set_OnTag_Handler, [:phid, :CPhidgetRFID_set_OnTag_Callback, :user_ptr], :int 
+	callback :CPhidgetRFID_set_OnTag2_Callback, [:phid, :user_ptr, :pointer, RFIDTagProtocol], :int
+    attach_function :CPhidgetRFID_set_OnTag2_Handler, [:phid, :CPhidgetRFID_set_OnTag2_Callback, :user_ptr], :int
 	
-	callback :CPhidgetRFID_set_OnTagLost_Callback, [:phid, :user_ptr, :pointer], :int   
-    attach_function :CPhidgetRFID_set_OnTagLost_Handler, [:phid, :CPhidgetRFID_set_OnTagLost_Callback, :user_ptr], :int 
+	callback :CPhidgetRFID_set_OnTagLost2_Callback, [:phid, :user_ptr, :pointer, RFIDTagProtocol], :int
+    attach_function :CPhidgetRFID_set_OnTagLost2_Handler, [:phid, :CPhidgetRFID_set_OnTagLost2_Callback, :user_ptr], :int
 	
 module CPhidgetRFID
       def self.method_missing(method, *args, &block)

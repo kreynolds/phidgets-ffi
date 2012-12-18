@@ -22,7 +22,6 @@ rfid.on_attach  do |device, obj|
 	rfid.antenna = true
 	rfid.led = true
 	sleep 1
-	
 end
 	 
 rfid.on_detach  do |device, obj|
@@ -55,6 +54,11 @@ if(rfid.attached?)
 	begin
 		puts "Tag present: #{rfid.tag_present}"
 		puts "Last tag: #{rfid.last_tag}"
+		puts "Last tag proto: #{rfid.last_tag_protocol}"
+		
+		# Example for writing to a tag:
+		#rfid.write("Some tag..", Phidgets::FFI::RFIDTagProtocol[:PhidgetTAG])
+		
 	rescue Phidgets::Error::UnknownVal => e
 		puts "Exception caught: #{e.message}"
 	end
