@@ -1,8 +1,8 @@
-=begin 
+=begin
   Phidget Hello World Program for all devices
   (c) Phidgets 2012
 =end
- 
+
 require 'rubygems'
 require 'phidgets-ffi'
 
@@ -31,6 +31,6 @@ puts 'Phidget Simple Playground (plug and unplug devices)'
 puts 'Please Enter to end anytime...'
 
 gets.chomp
-	
+
 puts 'Closing...'
 manager.close

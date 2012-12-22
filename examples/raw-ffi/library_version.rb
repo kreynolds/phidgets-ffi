@@ -8,4 +8,3 @@ if !(res = Phidgets::FFI::CPhidget_getLibraryVersion(ptr))
 else
   puts ptr.get_pointer(0).read_string
 end
-
