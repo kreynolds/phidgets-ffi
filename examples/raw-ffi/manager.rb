@@ -19,16 +19,16 @@ ptr2 = FFI::MemoryPointer.new(:int)
 count.get_int(0).times do |i|
   device = devices[0].get_pointer(i*4)     #On Mac OS X, it is i*4
 #  device = devices[0].get_pointer(i*4)    #On Linux, it is i*8
-  
+
   Common.getDeviceName(device, ptr1)
   name =  ptr1.get_pointer(0).read_string
 
   Common.getSerialNumber(device, ptr2)
   serial_number = ptr2.get_int(0)
-  
+
   Common.getDeviceVersion(device, ptr2)
   version = ptr2.get_int(0)
-  
+
   print "Device #{i+1}: #{name} v#{version} - Serial Number #{serial_number}\n"
 end
 
