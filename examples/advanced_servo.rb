@@ -4,14 +4,13 @@ require 'phidgets-ffi'
 puts "Library Version: #{Phidgets::FFI.library_version}"
 
 adv = Phidgets::AdvancedServo.new
-	  
+
 puts "Wait for PhidgetAdvancedServo to attached..."
 
 #The following method runs when the PhidgetAdvancedServo is attached to the system
 adv.on_attach  do |device, obj|
-	 
-    puts "Device attributes: #{device.attributes} attached"
-    puts "Class: #{device.device_class}"
+  puts "Device attributes: #{device.attributes} attached"
+  puts "Class: #{device.device_class}"
 	puts "Id: #{device.id}"
 	puts "Serial number: #{device.serial_number}"
 	puts "Version: #{device.version}"
@@ -19,9 +18,8 @@ adv.on_attach  do |device, obj|
 
 	device.advanced_servos[0].engaged = true
 	sleep 1  #allow time for engaged to be set before event ends
-
 end
-	 
+
 adv.on_detach  do |device, obj|
 	puts "#{device.attributes.inspect} detached"
 end
@@ -45,7 +43,6 @@ end
 sleep 3
 
 if(adv.attached?)
-
 	max = adv.advanced_servos[0].position_max
 	3.times do
 		adv.advanced_servos[0].position = rand(max)
@@ -53,7 +50,7 @@ if(adv.attached?)
 	end
 
 	puts "Setting servo parameters: #{adv.advanced_servos[0].set_servo_parameters(600, 2000, 120, 1500)}"
-	
+
 	puts "Acceleration: #{adv.advanced_servos[0].acceleration}"
 	puts "Acceleration min: #{adv.advanced_servos[0].acceleration_min}"
 	puts "Acceleration max: #{adv.advanced_servos[0].acceleration_max}"
@@ -77,7 +74,7 @@ if(adv.attached?)
 	adv.advanced_servos[0].type = Phidgets::FFI::AdvancedServoType[:default]
 	puts "Type: #{adv.advanced_servos[0].type}"
 
-	begin	
+	begin
 		puts "Position: #{adv.advanced_servos[0].position}" #An error is raised when the position is unknown
 	rescue Phidgets::Error::UnknownVal => e
 		puts "Exception caught: #{e.message}"
@@ -85,7 +82,6 @@ if(adv.attached?)
 
 	puts "Position max: #{adv.advanced_servos[0].position_max}"
 	puts "Position min: #{adv.advanced_servos[0].position_min}"
-
 end
 
 sleep 2

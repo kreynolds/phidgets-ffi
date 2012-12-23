@@ -4,14 +4,13 @@ require 'phidgets-ffi'
 puts "Library Version: #{Phidgets::FFI.library_version}"
 
 servo = Phidgets::Servo.new
-	  
+
 puts "Wait for PhidgetServo to attached..."
 
 #The following method runs when the PhidgetServo is attached to the system
 servo.on_attach  do |device, obj|
-	 
-    puts "Device attributes: #{device.attributes} attached"
-    puts "Class: #{device.device_class}"
+  puts "Device attributes: #{device.attributes} attached"
+  puts "Class: #{device.device_class}"
 	puts "Id: #{device.id}"
 	puts "Serial number: #{device.serial_number}"
 	puts "Version: #{device.version}"
@@ -21,9 +20,8 @@ servo.on_attach  do |device, obj|
 	device.servos[0].type = Phidgets::FFI::ServoType[:default]
 	puts "Setting servo parameters: #{device.servos[0].set_servo_parameters(600, 2000, 120)}"
 	sleep 1
-
 end
-	 
+
 servo.on_detach  do |device, obj|
 	puts "#{device.attributes.inspect} detached"
 end
