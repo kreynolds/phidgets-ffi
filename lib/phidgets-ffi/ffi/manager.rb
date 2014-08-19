@@ -1,7 +1,7 @@
 module Phidgets
   module FFI
 
-	if Config::CONFIG['target_os'] =~ /darwin/ #Mac OS X
+	if RbConfig::CONFIG['target_os'] =~ /darwin/ #Mac OS X
 		FFI_POINTER_SIZE = 4  
     else  #Linux
 		FFI_POINTER_SIZE = 8  

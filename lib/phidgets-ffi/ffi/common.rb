@@ -45,7 +45,7 @@ module Phidgets
     attach_function :CPhidget_set_OnError_Handler, [:phid, :CPhidget_set_OnError_Callback, :user_ptr], :int
     
 
-	if Config::CONFIG['target_os'] =~ /darwin/ #Mac OS X
+	if RbConfig::CONFIG['target_os'] =~ /darwin/ #Mac OS X
 		callback :CPhidget_set_OnWillSleep_Callback, [:user_ptr], :int
 		attach_function :CPhidget_set_OnWillSleep_Handler, [:CPhidget_set_OnWillSleep_Callback, :user_ptr], :int
 		callback :CPhidget_set_OnWakeup_Callback, [:user_ptr], :int
