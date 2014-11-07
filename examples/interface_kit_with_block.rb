@@ -14,7 +14,7 @@ Phidgets::InterfaceKit.new do |ifkit|
 	puts "Version: #{ifkit.version}"
 	puts "# Digital inputs: #{ifkit.inputs.size}"
 	puts "# Digital outputs: #{ifkit.outputs.size}"
-	puts "# Analog inputs: #{ifkit.sensors.size}"
+	puts "# Analog sensors: #{ifkit.sensors.size}"
 
 	sleep 1
 
