@@ -13,7 +13,7 @@ ifkit.on_attach  do |device, obj|
 	puts "Version: #{device.version}"
 	puts "# Digital inputs: #{device.inputs.size}"
 	puts "# Digital outputs: #{device.outputs.size}"
-	puts "# Analog inputs: #{device.sensors.size}"
+	puts "# Analog sensors: #{device.sensors.size}"
 
 	sleep 1
 
